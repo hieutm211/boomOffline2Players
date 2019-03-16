@@ -22,6 +22,7 @@ struct tMap {
 	int maxBombSize;
 	int maxSpeed;
 	double bombDuration;
+	double bombProcessTime;
 	double gameDuration;
 };
 
@@ -97,7 +98,9 @@ void readMap(const string& mapFileName) {
 		return;
 	}
 	
-	mapFile >> map.gameDuration >> map.row >> map.col >> map.maxBomb >> map.maxBombSize >> map.maxSpeed >> map.bombDuration;
+	mapFile >> map.row >> map.col >> map.gameDuration 
+		>> map.maxBomb >> map.maxBombSize >> map.bombDuration >> map.bombProcessTime 
+		>> map.maxSpeed;
 
 	for (int i = 0; i < map.row; i++) {
 		map.matrix.push_back(vector<char>(map.col));
