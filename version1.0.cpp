@@ -1,0 +1,287 @@
+
+#include <iostream>
+#include <vector>
+#include <fstream>
+using namespace std;
+
+const char cDirect[2][4] = {
+	{'w', 's', 'a', 'd'}, 
+	{'i', 'k', 'j', 'l'}
+};
+
+const int directX[4] = {-1, +1, -0, +0};
+const int directY[4] = {-0, +0, -1, +1};
+
+const char cBomb[2] = {'z', '/'};
+
+struct tMap {
+	int row;
+	int col;
+	vector< vector<char> > matrix;
+	int maxBomb;
+	int maxBombSize;
+	int maxSpeed;
+	double bombDuration;
+	double gameDuration;
+};
+
+struct tPlayer {
+	int x;
+	int y;
+	string name;
+	int character;
+	int numberOfBombs;
+	int bombSize;
+	int speed;
+};
+
+struct tBomb {
+	int x;
+	int y;
+	time_t timeEnd;
+	int owner;
+};
+
+struct tItem {
+	int x;
+	int y;
+	int type;
+};
+
+struct tCharacter {
+	string name;
+	int numberOfBombs;
+	int bombSize;
+	int speed;
+};
+
+struct tEvent {
+	char value;
+	int x;
+	int y;
+	int owner;
+};
+
+string mapFileName;
+string cFileName;
+
+tMap map;
+vector<tPlayer> player(2);
+vector<tBomb> bomb;
+vector<tItem> item;
+vector<tCharacter> character;
+
+void print(string s) {
+	cout << s << endl;
+}
+
+template<class T>
+void print2dVec(vector<vector<T>>& arr) {
+	for (int i = 0; i < arr.size(); i++) {
+		for (int j = 0; j < arr[i].size(); j++) {
+			cout << arr[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+
+void readMap(const string& mapFileName) {
+	print("reading map: begin");
+
+	ifstream mapFile;
+
+	mapFile.open(mapFileName, ifstream::in);
+	if (!mapFile.is_open()) {
+		cout << "Cannot open mapFile " << mapFileName << endl;
+		return;
+	}
+	
+	mapFile >> map.gameDuration >> map.row >> map.col >> map.maxBomb >> map.maxBombSize >> map.maxSpeed >> map.bombDuration;
+
+	for (int i = 0; i < map.row; i++) {
+		map.matrix.push_back(vector<char>(map.col));
+		for (int j = 0; j < map.col; j++) {
+			mapFile >> map.matrix[i][j];
+		}
+	}
+
+	mapFile.close();
+
+	print("reading map: done.\n");
+}
+
+void readCharacter(const string& cFileName) {
+	print("reading character: begin");
+
+	ifstream cFile;
+	cFile.open(cFileName, ifstream::in);
+	if (!cFile.is_open()) {
+		cout << "Cannot open cFile " << cFileName << endl;
+		return;
+	}
+
+	int numberOfCharacter;
+	cFile >> numberOfCharacter;
+
+	character.resize(numberOfCharacter);
+
+	for (int i = 0; i < character.size(); i++) {
+		cFile >> character[i].name >> character[i].numberOfBombs >> character[i].bombSize >> character[i].speed;
+	}
+
+	cFile.close();
+
+	print("reading character: done.\n");
+} 
+
+void getInitPosition(char c, tPlayer& p) {
+	for (int i = 0; i < map.row; i++) {
+		for (int j = 0; j < map.col; j++) {
+			if (map.matrix[i][j] == c) {
+				p.x = i;
+				p.y = j;
+				map.matrix[i][j] = '.';
+				return;
+			}
+		}
+	}	
+}
+
+void start() {
+	print("starting...");
+
+	mapFileName = "map.txt";
+	cFileName = "character.txt";
+	readMap(mapFileName);
+	readCharacter(cFileName);
+	
+}
+
+void initiate(const string& mapFileName, const string& characterFileName) {
+	print("Initiating...");
+
+	player[0].character = 0;
+	player[1].character = 0;
+
+	getInitPosition('A', player[0]);
+	getInitPosition('B', player[1]);
+
+	print("");
+}
+
+void bind(const tMap& map, const vector<tPlayer>& player, const vector<tBomb>& bomb, const vector<tItem>& item, vector<vector<char>>& mapBind) {
+	int x, y;
+
+	for (int i = 0; i < player.size(); i++) {
+		x = player[i].x;
+		y = player[i].y;
+		mapBind[x][y] = (char)('A' + i);
+	}
+}
+
+void render() {
+	system("clear");
+
+	vector<vector<char>> mapBind(map.matrix.begin(), map.matrix.end());
+	bind(map, player, bomb, item, mapBind);
+
+	for (int i = 0; i < map.row; i++) {
+		for (int j = 0; j < map.col; j++) {
+			cout << mapBind[i][j] << " ";
+		}	
+		cout << endl;
+	}
+}
+
+bool checkKeystroke(char keystroke, int id) {
+	if (keystroke == cBomb[id]) return true;
+	for (int i = 0; i < 4; i++) {
+		if (keystroke == cDirect[id][i]) return true;
+	}	
+	return false;
+}
+
+tEvent getUserInput() {
+	tEvent event = {'.', -1, -1, -1};
+	cin >> event.value;
+
+	for (int i = 0; i < 2; i++) {
+		if (checkKeystroke(event.value, i)) {
+			event.x = player[i].x;
+			event.y = player[i].y;
+			event.owner = i;
+			return event;
+		}
+	}
+}
+
+bool inMap(const int& x, const int& y) {
+	return 0 <= x && x < map.row && 0 <= y && y < map.col;
+}
+
+void updateEventCoordinate(tEvent& event) {
+	for (int i = 0; i < 4; i++) {
+		if (event.value == cDirect[event.owner][i]) {
+			event.x += directX[i];
+			event.y += directY[i];
+		}
+	}
+	
+}
+
+bool validInput(tEvent event) {
+	updateEventCoordinate(event);
+	return inMap(event.x, event.y);
+}
+
+void updateUserCoordinate(const int& id, const int& newX, const int& newY) {
+	player[id].x = newX;
+	player[id].y = newY;
+}
+
+void updateGameStatus(const tEvent& event) {
+	updateUserCoordinate(event.owner, event.x, event.y);		
+}
+bool stopCondition() {
+	return false;	
+}
+
+bool addAnEvent() {
+	
+}
+void endGame() {
+
+}
+
+void gameLoop() {
+	cout << "Game begin." << endl;	
+
+	while(true) {
+		render();
+		
+		tEvent inputEvent;
+		do {
+			inputEvent = getUserInput();
+		} while (!validInput(inputEvent));
+		
+		updateEventCoordinate(inputEvent);
+		updateGameStatus(inputEvent);
+
+		if (stopCondition()) {
+			endGame();
+			break;
+		}
+
+		if (addAnEvent()) {
+			//updateGameStatus();
+		}
+	}
+}
+
+int main() {
+	start();
+	initiate(mapFileName, cFileName);
+	gameLoop();	
+	return 0;
+}
