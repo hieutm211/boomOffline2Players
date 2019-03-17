@@ -1,0 +1,43 @@
+name = default
+
+row, col, gameDuration = 20 20 1200
+bombDuration, bombProcessTime, itemDelay = 3 1 12
+maxBomb = 5
+maxBombSize = 5
+maxItem = 3
+maxSpeed = 3
+
+. . . . . . . . . . . . . . . . . . . .
+. A . . . . . . . . . . . . . . . . . .
+. . . . * . . . . . . . . * . . . . . .
+. . . . . . B . . . . . . . . . . . . .
+. . . . . . * . . # o . . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . * . . . . . . * . . . . . .
+. . . o . . . . . . . . . . . . . . . .
+. . . . . . o . . . . . . . . . . . . .
+o . . . . . . . . . # . . . . . . . . .
+. . . . . . . . . . . . . . . * . . . .
+. . . . . . . . # . . . . . . . . . . .
+. . . # . . . . . . . . * * * . * * . .
+. . . . . . . . . . . . . . . . . . . .
+. . . . . . # . . . . # . . . . . . . .
+. . . . . . . . . . . . . . . . . . . .
+. . # . . . . . . . . o . . . * . . . .
+. . . . . . o . . . . . . . . . . . . o
+. . . . . . . . . * . . . . . . . . . .
+. . . o . . . . . . . . . . . . . . . .
+
+numberOfEntity = 6
+
+[symbol canGoThrough canBreak imgFile] = 
+//the 1st symbol is ground
+//the 2nd symbol is player1
+//the 3rd symbol is player2
+
+A 0 1 player1.png
+B 0 1 player2.png
+. 1 1 ground.png
+* 0 1 symb1.png
+# 0 0 symb2.png
+o 1 1 symb3.png

@@ -1,0 +1,7 @@
+numberOfCharacet = 2
+
+[name, numberOfBombs, bombSize, speed] =
+char 1 1 1
+hehe 2 1 1
+
+//Add line if you want more character, do not remove/re-order the lines.
