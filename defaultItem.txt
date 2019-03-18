@@ -1,0 +1,8 @@
+numberOfItems = 2
+
+[symbol, imgFile, numberOfAttributes : Attributes] =
+5 bombItem.png 1 : bomb
+6 bombSizeItem.png 1 : bombSize
+
+//Add line if you want more character, do not remove/re-order the lines.
+//item's symbol cannot coincide with entities's symbol (in map).
