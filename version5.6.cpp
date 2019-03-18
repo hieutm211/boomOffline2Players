@@ -607,6 +607,17 @@ int countBomb(const int& playerId) {
 	return ans;
 }
 
+bool isCompetitorPosition(const int& playerId, const int& x, const int& y) {
+	for (int i = 0; i < player.size(); i++) {
+		if (i != playerId) {
+			if (player[i].x == x && player[i].y == y) {
+				return true;
+			}
+		}	
+	}
+	return false;
+}
+
 bool validInput(tEvent event) {
 	if (event.type == "direction") {
 		if (!inMap(event.x, event.y)) {
@@ -614,6 +625,10 @@ bool validInput(tEvent event) {
 		}
 
 		if (!canGo(event.x, event.y)) {
+			return false;
+		}
+
+		if (isCompetitorPosition(event.owner, event.x, event.y)) {
 			return false;
 		}
 
