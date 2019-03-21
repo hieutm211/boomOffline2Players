@@ -1,8 +1,8 @@
 numberOfCharacters = 2
 
 [name, numberOfBombs, bombSize, speed, symbol, imgFile, bombImgFile, bombLineImgFile] =
-water 1 1 1 A a 0 water.png bomb1.png bombLine1.png
-fire 2 1 1 B b 1 fire.png bomb2.png bombLine2.png
+water 1 1 2 A a 0 water.png bomb1.png bombLine1.png
+fire 2 1 2 B b 1 fire.png bomb2.png bombLine2.png
 
 //Add line if you want more character, do not remove/re-order the lines.
 //character's symbol cannot coincide with entities's symbol (in map).
