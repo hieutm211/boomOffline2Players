@@ -5,7 +5,7 @@ bombDuration, bombProcessTime, itemDelay = 3 1 12
 maxBomb = 5
 maxBombSize = 5
 maxItem = 3
-maxSpeed = 8
+maxSpeed = 3
 
 A . . . . * . . . .
 . . . . . . . . . .
