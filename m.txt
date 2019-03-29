@@ -1,7 +1,7 @@
 name = default
 
 row, col, gameDuration = 10 10 1200
-bombDuration, bombProcessTime, itemDelay = 3 1 12
+bombDuration, bombProcessTime, itemDelay = 3 1 15
 maxBomb = 5
 maxBombSize = 5
 maxItem = 3
