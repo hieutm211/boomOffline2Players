@@ -1,23 +1,24 @@
 name = default
 
-row, col, gameDuration = 10 10 1200
-bombDuration, bombProcessTime, itemDelay = 3 1 15
+row, col, gameDuration = 12 20 1200
+bombDuration, bombProcessTime, itemDelay = 3 1 5
 maxBomb = 5
 maxBombSize = 5
-maxItem = 3
+maxItem = 5
 maxSpeed = 3
 
-A . . . . * . . . .
-. . . . . . . . . .
-. . * * * . * * . .
-. . . . . . . . . .
-. # . . * . . o . .
-. . . . . . . . . .
-. o . . . * . . . .
-. . . # . . . @ . o
-. @ . . . . . . # .
-. . . . . . . . . B
-
+A . . . . . . . . . . . . . . . . . . .
+. * # . # o # # # # # # # # o # . # * .
+. # . . . . . . . . . . . . . . . . # .
+. . . # * * * * * * * * * * * o # . . .
+. # . o . . . . . . . . . . . . * . # .
+. # . * . # o @ o @ o @ o # . . * . # .
+. # . * . # @ o @ o @ o @ # . . * . # .
+. # . * . . . . . . . . . . . . o . # .
+. . . # o * * * * * * * * * * * # . . .
+. # . . . . . . . . . . . . . . . . # .
+. * # . # o # # # # # # # # o # . # * .
+. . . . . . . . . . . . . . . . . . . B
 numberOfEntity = 5
 
 [symbol canGoThrough canBreak imgFile] = 
