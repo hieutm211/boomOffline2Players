@@ -474,17 +474,17 @@ bool start() {
 	cout << "Input mapFile = ";
 	//cin >> mapFileName;
 	//mapFileName += ".txt";
-	mapFileName = "m.txt";
+	mapFileName = "mapData.txt";
 
 	cout << "Input characterFile = ";
 	//cin >> cFileName;
 	//cFileName += ".txt";
-	cFileName = "c.txt";
+	cFileName = "characterData.txt";
 
 	cout << "Input itemFile = ";
 	//cin >> itemFileName;
 	//itemFileName += ".txt";
-	itemFileName = "i.txt";
+	itemFileName = "itemData.txt";
 
 	if (!readMap(mapFileName) || !readCharacter(cFileName) || !readItem(itemFileName)) {
 		return false;
@@ -1408,6 +1408,22 @@ int main() {
 	app.create(sf::VideoMode(mapData.col * cellWidth, mapData.row * cellHeight), "BoomOffline2Players - hieutm211", sf::Style::Close);
 	app.setFramerateLimit(framerateLimit);
 	app.setKeyRepeatEnabled(false);
+
+	//display guide
+	sf::Sprite guideSprite;
+	sf::Texture guideTexture;
+	if (!guideTexture.loadFromFile("images/guide.png", sf::IntRect(0, 0, mapData.col*cellWidth, mapData.row*cellHeight))) {
+		cout << "err";
+	}
+
+	app.clear(sf::Color::White);
+
+	guideSprite.setTexture(guideTexture);
+	guideSprite.setPosition(sf::Vector2f(0, 0));
+
+	app.draw(guideSprite);
+	app.display();
+	system("sleep 5");
 	
 	//background music
 	music.play();
